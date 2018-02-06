@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from slugify import slugify
 
 with open('links.html') as fp:
     soup = BeautifulSoup(fp, "html.parser")
@@ -9,7 +10,8 @@ r = requests.get("https://www.clevelandfilm.org/films/2017/zip-zap-and-the-capta
 movie_soup = BeautifulSoup(r.content, "html.parser")
 main_content = movie_soup.find('div', {'id': 'ciff-left'})
 title = main_content.find('h1', {'itemprop': 'name'})
-f = open("{}.html".format(title.text),"w+")
+slugged_title = slugify(title.text)
+f = open("{}.html".format(slugged_title),"w+") # line where problem lies
 info = main_content.find('p', {'class': 'info'})
 country_meta = info.find('span', {'itemprop': 'countryOfOrigin'})
 country = country_meta.find('span', {'itemprop': 'name'})
