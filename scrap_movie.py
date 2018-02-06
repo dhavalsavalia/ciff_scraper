@@ -5,11 +5,13 @@ with open('links.html') as fp:
     soup = BeautifulSoup(fp, "html.parser")
 
 for link in soup.find_all('a'):
+    url = link.get('href')
+    url = url.split("https://www.clevelandfilm.org/films/2017/")
     r = requests.get(link.get('href'))
     movie_soup = BeautifulSoup(r.content, "html.parser")
     main_content = movie_soup.find('div', {'id': 'ciff-left'})
     title = main_content.find('h1', {'itemprop': 'name'})
-    f = open("{}.html".format(title.text),"w+")
+    f = open("{}.html".format(url[1]),"w+")
     info = main_content.find('p', {'class': 'info'})
     country_meta = info.find('span', {'itemprop': 'countryOfOrigin'})
     country = country_meta.find('span', {'itemprop': 'name'})

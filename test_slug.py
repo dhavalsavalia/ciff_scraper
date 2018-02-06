@@ -6,9 +6,8 @@ _slugify_hyphenate_re = re.compile(r'[-\s]+')
 
 def _slugify(value):
     import unicodedata
-    if not isinstance(value, str):
-        value = str(value)
+    if not isinstance(value, unicode):
+        value = unicode(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = str(_slugify_strip_re.sub('', value).strip().lower())
+    value = unicode(_slugify_strip_re.sub('', value).strip().lower())
     return _slugify_hyphenate_re.sub('-', value)
-print((_slugify("Hello There!")))
