@@ -1,17 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
-from slugify import slugify
+
 
 with open('links.html') as fp:
     soup = BeautifulSoup(fp, "html.parser")
 
 # for link in soup.find_all('a'):
 r = requests.get("https://www.clevelandfilm.org/films/2017/zip-zap-and-the-captains-island")
+url = "https://www.clevelandfilm.org/films/2017/zip-zap-and-the-captains-island"
+url = url.split("https://www.clevelandfilm.org/films/2017/")
 movie_soup = BeautifulSoup(r.content, "html.parser")
 main_content = movie_soup.find('div', {'id': 'ciff-left'})
 title = main_content.find('h1', {'itemprop': 'name'})
-slugged_title = slugify(title.text)
-f = open("{}.html".format(slugged_title),"w+") # line where problem lies
+f = open("{}.html".format(url[1]),"w+") # line where problem lies
 info = main_content.find('p', {'class': 'info'})
 country_meta = info.find('span', {'itemprop': 'countryOfOrigin'})
 country = country_meta.find('span', {'itemprop': 'name'})
